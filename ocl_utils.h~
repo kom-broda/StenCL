@@ -23,7 +23,7 @@ typedef struct {
 	int num_dev;
 } platform_dev;
 
-platform_dev *retrieve_platforms(int *num_platforms);
+int retrieve_platforms(platform_dev *system);
 void display_platforms(platform_dev *system);
 
 #endif

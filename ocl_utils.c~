@@ -9,19 +9,19 @@ platform_dev *retrieve_platforms(int *num_platforms)
 {
     cl_platform_id *platform_id = NULL;
     cl_int ret;
-    int i, ret_num_devices;
+    int ret_num_platforms, i, ret_num_devices;
     platform_dev *system_=NULL;
     
-    ret = clGetPlatformIDs(10, platform_id, num_platforms);
+    ret = clGetPlatformIDs(10, platform_id, &ret_num_platforms);
     
     //ret_num_platforms=10;
     
-    system_ = (platform_dev *)malloc(*num_platforms * sizeof(platform_dev));
-    platform_id = (cl_platform_id *)malloc(*num_platforms * sizeof(cl_platform_id));
+    system_ = (platform_dev *)malloc(ret_num_platforms*sizeof(platform_dev));
+    platform_id = (cl_platform_id *)malloc(ret_num_platforms*sizeof(cl_platform_id));
     
-    ret = clGetPlatformIDs(*num_platforms, platform_id, num_platforms);
+    ret = clGetPlatformIDs(ret_num_platforms, platform_id, &ret_num_platforms);
     
-    for(i = 0; i < *num_platforms; i++)
+    for(i = 0; i < ret_num_platforms; i++)
     {
         system_[i].devices = (cl_device_id *)malloc(MAX_DEVICES_PER_PLATFORM*sizeof(cl_device_id));
         system_[i].platform = platform_id[i];
