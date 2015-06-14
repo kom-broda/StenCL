@@ -57,13 +57,14 @@ void main()
     source_size = fread( source_str, 1, MAX_SOURCE_SIZE, fp);
     fclose( fp );
     
-    //Retrieve work group dimension for each device
+    //Get work group dimension for each device
     device_work_group_info *dev_wg = (device_work_group_info *) malloc (sizeof (device_work_group_info) * total_dev (system_, num_platforms));
     int k = 0;
     cl_context context;
     cl_program program;
     cl_kernel kernel;
     
+    printf ("\nDevice n.\tSuggested work group dimension\n\n");
     for (i = 0; i < num_platforms; i++){
     	for (j = 0; j < system_[i].num_dev; j++){
     		dev_wg[k].device = system_[i].devices[j];
@@ -81,10 +82,10 @@ void main()
     		kernel = clCreateKernel(program, "vector_add", &err);    
 			
 			//Get work group dimension for the k-th device
-    		err = clGetKernelWorkGroupInfo (kernel, dev_wg[k].device,	CL_KERNEL_WORK_GROUP_SIZE, sizeof (size_t),
+    		err = clGetKernelWorkGroupInfo (kernel, dev_wg[k].device, CL_KERNEL_WORK_GROUP_SIZE, sizeof (size_t),
     										(void *) &dev_wg[k].max_wg_dim, NULL);
     		
-    		printf ("Max work group dimension: %d\n", dev_wg[k].max_wg_dim);								
+    		printf ("%d:\t\t%zu\n", k+1, dev_wg[k].max_wg_dim);								
     		k++;
     		
     	}
