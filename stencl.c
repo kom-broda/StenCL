@@ -17,7 +17,7 @@ void main()
     
     system_=retrieve_platforms(&num_platforms);
     
-    for(i = 0; i<1; i++)
+    for(i = 0; i < num_platforms; i++)
     {
         err = clGetPlatformInfo (system_[i].platform, CL_PLATFORM_NAME, 200, (void *)info, NULL);
         printf("Platform n.%d, name: %s\n",i+1,info);
