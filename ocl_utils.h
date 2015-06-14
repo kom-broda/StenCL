@@ -10,12 +10,11 @@
 #define MAX_DEVICES_PER_PLATFORM 100
 
 
-/*
 typedef struct {
 	cl_device_id device;
 	size_t wg_mult;
 	size_t max_wg_dim;
-} device_wg;*/
+} device_work_group_info;
 
 typedef struct {
 	cl_platform_id platform;

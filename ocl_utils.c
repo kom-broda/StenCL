@@ -14,8 +14,6 @@ platform_dev *retrieve_platforms(int *num_platforms)
     
     ret = clGetPlatformIDs(10, platform_id, num_platforms);
     
-    //ret_num_platforms=10;
-    
     system_ = (platform_dev *)malloc(*num_platforms * sizeof(platform_dev));
     platform_id = (cl_platform_id *)malloc(*num_platforms * sizeof(cl_platform_id));
     
