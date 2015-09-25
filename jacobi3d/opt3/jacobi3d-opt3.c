@@ -178,17 +178,6 @@ void cl_launch_kernel() {
 	}
 }
 
-void cl_clean_up_kernel() {
-	// Clean up
-	errcode = clFlush(clCommandQue);
-	errcode |= clReleaseKernel(clKernel1);
-	errcode |= clReleaseKernel(clKernel2);
-	errcode |= clReleaseProgram(clProgram);
-	errcode |= clReleaseMemObject(cl_set);
-	errcode |= clReleaseMemObject(cl_res);
-	if(errcode != CL_SUCCESS) printf("Error in cleanup kernel\n");
-}
-
 void cl_clean_up() {
 	// Clean up
 	errcode = clFlush(clCommandQue);

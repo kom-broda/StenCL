@@ -231,12 +231,6 @@ int main(void)
 	printf("Sequential time:\t%.5f s\n", seq_ex_time);
 	printf("Speedup:\t\t%.1fx\n", seq_ex_time/cl_ex_time);
 	
-	for(i = 0; i < NX; i++)
-		for(j = 0; j < NY; j++)
-			if (res_gpu[i][j]==0 && res[i][j] !=0){
-				printf("%d %d\n", i, j);
-			}
-	
 	compare_results_2d(NX, NY, res, res_gpu, PERCENT_DIFF_ERROR_THRESHOLD);		
 	
 	cl_clean_up();
