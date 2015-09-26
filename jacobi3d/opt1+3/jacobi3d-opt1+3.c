@@ -20,9 +20,9 @@
 //Number of iterations per execution
 #define TMAX 100
 //Working set sizes on each dimension
-#define NX 128
-#define NY 128
-#define NZ 128
+#define NX 64
+#define NY 64
+#define NZ 64
 //Workgroup size on each dimension
 #define DIM_X 8
 #define DIM_Y 8
@@ -207,38 +207,38 @@ int main(void)
 	init_3d_array(NX, NY, NZ, set);
 	memcpy_3d(NX, NY, NZ, set, cpy);	   
 	
-	printf("\n*********3D Jacobian stencil - Baseline*********\n\n");
+	printf("\n*********3D Jacobian stencil - Opt-1+3*********\n\n");
 	errcode = cl_initialization(&device_id, &clGPUContext, &clCommandQue);
-	if(errcode != CL_SUCCESS) exit(1);
-	
-	/*OpenCL execution*/
-	source_str = read_cl_file("jacobi3d.cl", &source_size);		
-	errcode = cl_load_prog(&clProgram, &clGPUContext, &device_id, source_str, source_size);
+	if(errcode != CL_SUCCESS) exit(1);  	
+    
+    /*OpenCL execution*/
+    source_str = read_cl_file("jacobi3d-opt1+3.cl", &source_size);	
+    errcode = cl_load_prog(&clProgram, &clGPUContext, &device_id, source_str, source_size);
 	if(errcode != CL_SUCCESS) exit(1);
 	load_kernel();
-	cl_mem_init(NX, NY, NZ, set, res);
+	cl_mem_init(NX, NY, NZ, cpy, res);
 	
 	clock_gettime(CLOCK_MONOTONIC, &tstart);
-	
+		
 	cl_launch_kernel();
 	errcode = clEnqueueReadBuffer(clCommandQue, cl_set, CL_TRUE, 0, NX*NY*NZ*sizeof(float), res_gpu, 0, NULL, NULL);
 	if(errcode != CL_SUCCESS) printf("Error in reading GPU mem\n");
 	
-	clock_gettime(CLOCK_MONOTONIC, &tend);
+	clock_gettime(CLOCK_MONOTONIC, &tend);		
 	cl_ex_time = (float) (((double)tend.tv_sec + 1.0e-9*tend.tv_nsec) - 
 				((double)tstart.tv_sec + 1.0e-9*tstart.tv_nsec));
-    
+		
 	/*Sequential execution*/
 	clock_gettime(CLOCK_MONOTONIC, &tstart);
-	sequential_jacobi_3d(NX, NY, NZ, set, res);
-	clock_gettime(CLOCK_MONOTONIC, &tend);	  
+	sequential_jacobi_3d(NX, NY, NZ, cpy, res);
+	clock_gettime(CLOCK_MONOTONIC, &tend);
 	seq_ex_time = (float) (((double)tend.tv_sec + 1.0e-9*tend.tv_nsec) - 
-		      	 ((double)tstart.tv_sec + 1.0e-9*tstart.tv_nsec));		
-					
+		      	 ((double)tstart.tv_sec + 1.0e-9*tstart.tv_nsec));
+		      	 
 	printf("\nParallel time:\t\t%.5f s\n", cl_ex_time);
 	printf("Sequential time:\t%.5f s\n", seq_ex_time);
-	printf("Speedup:\t\t%.1fx\n", seq_ex_time/cl_ex_time); 
-	compare_results_3d(NX, NY, NZ, res, res_gpu, PERCENT_DIFF_ERROR_THRESHOLD);		
+	printf("Speedup:\t\t%.1fx\n", seq_ex_time/cl_ex_time);
+	compare_results_3d(NX, NY, NZ, res, res_gpu, PERCENT_DIFF_ERROR_THRESHOLD);		 			
 	
 	cl_clean_up();
 		

@@ -20,9 +20,9 @@
 //Number of iterations per execution
 #define TMAX 100
 //Working set sizes on each dimension
-#define NX 64
-#define NY 64
-#define NZ 64
+#define NX 128
+#define NY 128
+#define NZ 128
 //Workgroup size on each dimension
 #define DIM_X 8
 #define DIM_Y 8

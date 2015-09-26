@@ -1,6 +1,6 @@
-#define NX 64
-#define NY 64
-#define NZ 64
+#define NX 128
+#define NY 128
+#define NZ 128
 
 /* Three dimensional Jacobi kernel */
 __kernel void _jacobi(__global float * p_set, __global float * p_res) {
